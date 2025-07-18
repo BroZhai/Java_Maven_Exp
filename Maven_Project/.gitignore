@@ -1,0 +1,6 @@
+# Maven项目常用.gitignore (默认不会生成, 需要自行创建)
+target/
+**/target/
+# Maven临时文件
+pom.xml.*
+.mvn/
