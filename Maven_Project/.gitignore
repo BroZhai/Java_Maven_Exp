@@ -4,7 +4,3 @@ target/
 # Maven临时文件
 pom.xml.*
 .mvn/
-
-#IDE相关
-.idea
-.vscode

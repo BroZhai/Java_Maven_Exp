@@ -1,4 +1,5 @@
 Build成功, 首次commit提交
 追加了日志文件, 配置了镜像下载, 对pom.xml中的内容进行了简单注释
 被/main 目录下的文件不能'直接运行'问题卡了半天, 花了一个多小时最后发现原来是IDE的问题, vscode不知道抽什么风硬是找不到main函数, 但是换成Idea就好了 x.x
+追加了最外层忽略IDE垃圾的.gitignore, 内部的.gitignore专门用来忽略Mvn编译生成的target
 2025.07.18
