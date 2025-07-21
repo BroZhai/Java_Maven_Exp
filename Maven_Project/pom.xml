@@ -7,6 +7,7 @@
   <version>1.0-SNAPSHOT</version>
   <name>Maven_Project</name>
   <url>http://maven.apache.org</url>
+
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
@@ -14,5 +15,14 @@
       <version>3.8.1</version>
       <scope>test</scope>
     </dependency>
+
+    <!-- 追加的第三方库json -->
+    <dependency>
+      <groupId>com.alibaba.fastjson2</groupId>
+      <artifactId>fastjson2</artifactId>
+      <version>2.0.57</version>
+    </dependency>
+
   </dependencies>
+  
 </project>
