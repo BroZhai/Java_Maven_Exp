@@ -1,12 +1,6 @@
 package com.tekon.my_class; // 在maven创建的项目中, package的声明从'com.'的位置开始 (决不能以java开头! 这不合法 XD)
 
-import java.lang.Math;
-import java.util.ArrayList;
-
-import com.alibaba.fastjson2.annotation.JSONField;
 import java.io.Serializable;
-
-// import Fun_Programs.Russian_Roulette.Shell;
 
 public class Gun implements Serializable{
 
@@ -18,7 +12,7 @@ public class Gun implements Serializable{
   // @JSONField(name = "_ammo_type")
   private String ammo_type;
   // @JSONField(name = "_gun_id")
-  private transient int gun_id; // 在使用第三方序列化库时, transient关键字可能会失效
+  private transient int gun_id; // 在使用第三方序列化库时, transient关键字'可能'会失效 (Gson不失效, fastjson2会无视transient)
 
   public Gun(String gun_name, String ammo_type, int gun_id){
     this.gun_name = gun_name;
@@ -35,7 +29,7 @@ public class Gun implements Serializable{
     return this.ammo_type;
   }
 
-  public int get_gun_id(){ // 用第三方序列化库的时候, 该项可能可以正常获取
+  public int get_gun_id(){ // 用第三方序列化库的时候, 该项可能可以正常获取 (fastjson无视transient关键字, 但是Gson会老实一点 XD)
     return this.gun_id;
   }
 
