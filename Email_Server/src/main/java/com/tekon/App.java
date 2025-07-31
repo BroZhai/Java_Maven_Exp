@@ -63,7 +63,15 @@ public class App
             InternetAddress sender_ip = new InternetAddress(sender_address);
             InternetAddress receiver_ip = new InternetAddress(receiver_address);
             email_obj.setFrom(sender_ip); // 设置发件人 (这里指定要传一个Address对象)
-            email_obj.addRecipient(Message.RecipientType.TO, receiver_ip); // 设置接收人
+            email_obj.addRecipient(Message.RecipientType.TO, receiver_ip); // 设置接收人 (直接发)
+            // email_obj.addRecipient(Message.RecipientType.CC, receiver2_ip); // 抄送给另一个哥们
+            /*  Tips:
+                1. 上面的Message.RecipientType.IO是有多个不同的常量:
+                    TO: 简单发给对应的收件人
+                    CC: 抄送
+                    BCC: 秘密抄送
+                2. 上面的 '收件人' 可以是一个 Address[] 数组, 表示同时发给多个人
+             */
 
             System.out.print("\n请输入邮件标题: ");
             String email_title = user_input.nextLine();
