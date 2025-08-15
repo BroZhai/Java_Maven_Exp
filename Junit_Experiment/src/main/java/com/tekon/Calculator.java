@@ -15,6 +15,10 @@ public class Calculator
 
     static double devide(int a, int b){
         double da = (double) a;
+        if(b==0){
+            // 除数为0, 手动抛出一个IllegalArgumentException异常 (不是原来的Math异常)
+            throw new IllegalArgumentException();
+        }
         return da/b;
     }
 
