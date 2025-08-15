@@ -16,6 +16,7 @@ class CalculatorTest{
     public void add_test(){
         System.out.println("加法测试开始...");
         assertEquals(5, Calculator.add(2, 3));
+        // assertEquals() 判断两个'值'是否相等
     }
 
     @Test
@@ -23,6 +24,7 @@ class CalculatorTest{
         System.out.println("减法测试开始...");
         int result = Calculator.sub(11, 2);
         assertTrue(result == 9);
+        // assertTure() 内部条件'为真'判断
     }
 
     @Test
@@ -37,6 +39,7 @@ class CalculatorTest{
     @Test
     public void devide_test(){
         System.out.println("除法测试开始, 但是除数为0");
+        // assertThrows()看看方法有没有抛出对应的异常
         assertThrows(IllegalArgumentException.class, () -> {
             Calculator.devide(3,0);
         });
