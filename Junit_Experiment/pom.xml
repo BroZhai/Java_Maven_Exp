@@ -8,16 +8,6 @@
   <name>Junit_Experiment</name>
   <url>http://maven.apache.org</url>
 
-  <build>
-    <plugins>
-        <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-surefire-plugin</artifactId>
-            <version>3.0.0-M7</version>
-        </plugin>
-    </plugins>
-  </build>
-
 
   <dependencies>
   <!-- maven-archetype-quickstart创建模版默认自带一个老掉牙的Junit 3.x, 我们需要自行下载新的Junit 5进行引入 -->
@@ -36,12 +26,6 @@
       <scope>test</scope>
     </dependency>
 
-    <dependency>
-        <groupId>org.junit.jupiter</groupId>
-        <artifactId>junit-jupiter-engine</artifactId>
-        <version>5.8.2</version>
-        <scope>test</scope>
-    </dependency>
 
   </dependencies>
   
