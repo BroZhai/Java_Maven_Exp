@@ -1,12 +1,17 @@
 package com.tekon;
 
-import java.sql.Connection; // 用于创建各种Statement'执行对象' (纯'中间商', 但是可以设置'事务是否自动提交')
 import java.sql.DriverManager; // 本地连接器, 设置连接配置
+import java.sql.Connection; // 用于创建各种Statement'执行对象' (纯'中间商', 但是可以设置'事务是否自动提交')
+import java.sql.Statement; // 用于执行SQL语句的载体, 返回ResultSet结果集 (用于'静态查询')
+import java.sql.PreparedStatement; // 高级的'Statement' (用于带参数的'动态查询', 可以防范SQL注入, 且性能更好, 也可以用于'静态查询')
 import java.sql.ResultSet; // 操作'查询结果'
 import java.sql.SQLException; // 导入SQL操作的'异常类'
-import java.sql.Statement; // 用于执行SQL语句的载体, 返回ResultSet结果集
+
+
 // 其他工具类
 import java.util.Scanner;
+
+import com.mysql.cj.x.protobuf.MysqlxPrepare.Prepare;
 
 public class My_Database {
 
@@ -21,19 +26,25 @@ public class My_Database {
             // 表中有数据, 自行遍历每一个数据条并进行输出 
             do{ // 注意上面的if在'有数据'的情况下会'先耗一行数据', 所以下面用先do后while结构, 确保上面的if出来的数据没有'白消耗' XD
                 System.out.println("当前tekon_item有: ");
-                // 调用 ResultSet对象的.next()方法取得第一个以及'往后'的数据 (.next()会返回一个布尔告知还有没有数据)
                 int item_id = results.getInt("item_id");
                 int item_count = results.getInt("item_count");
                 String item_name = results.getString("item_name");
                 String item_desc = results.getString("item_desc");
                 System.out.println("物品id: " + item_id + ", 物品名称: " + item_name + ", 物品描述: " + item_desc + ", 物品数量: " + item_count);
-            }while(results.next());
-            
-            
+            }while(results.next()); // 调用 ResultSet对象的.next()方法取得第一个以及'往后'的数据 (.next()会返回一个布尔告知还有没有数据)
+
         }
 
         System.out.println("\n查询结束!");
     }
+
+    // 2. 追加一条数据
+    public static void insert_one(Connection connector){
+        
+    }
+    // 3. 删除一条数据 (根据id)
+
+    // 4. 执行自定义SQL语句
 
 /* ------------------分割线--------------------- */
     public static void main( String[] args ){
@@ -84,7 +95,7 @@ public class My_Database {
                         break;
                     case 5:
                         keep_running = false;
-                        System.out.println("感谢您使用baka_item数据库, 现在滚犊子吧 :3");
+                        System.out.println("感谢您使用tekon_item数据库, 现在滚犊子吧 :3");
                         break;
                 
                     default:
