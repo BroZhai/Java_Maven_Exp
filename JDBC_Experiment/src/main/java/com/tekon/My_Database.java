@@ -114,8 +114,22 @@ public class My_Database {
     }
 
     // 5. 删除多条数据 (也是用id)
-    public static void delete_many(Connection connector){
-        
+    public static void delete_many(Connection connector, Scanner user_input) throws SQLException{
+        show_all(connector);
+        System.out.print("请输入要删除的id数, 用空格隔开每个数: ");
+        String number_string = user_input.nextLine();
+        String[] split_num = number_string.split("\\s"); // 使用字符串的.split("RE表达式")方法对 内容进行指定分割, 得到分隔好的不同的String[]数组
+        for(String i : split_num){
+            int item_id = Integer.parseInt(i);
+            String delete_sql = "delete from tekon_item where item_id = ?;";
+            PreparedStatement delete = connector.prepareStatement(delete_sql);
+            delete.setInt(1, item_id);
+            if(delete.executeUpdate()!=0){
+                System.out.println("已成功删除id为 " + item_id + " 的物品");
+            }else{
+                System.out.println("未能找到id " + item_id + " 的物品...");
+            }
+        }
     }
 
 
@@ -168,7 +182,7 @@ public class My_Database {
                         delete_one(my_connector, user_input);
                         break;
                     case 5:
-
+                        delete_many(my_connector, user_input);
                         break;
                     case 6:
                         keep_running = false;
