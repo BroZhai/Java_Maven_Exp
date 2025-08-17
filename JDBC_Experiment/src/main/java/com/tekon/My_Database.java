@@ -6,8 +6,7 @@ import java.sql.Statement; // 用于执行SQL语句的载体, 返回ResultSet结
 import java.sql.PreparedStatement; // 高级的'Statement' (用于带参数的'动态查询', 可以防范SQL注入, 且性能更好, 也可以用于'静态查询')
 import java.sql.ResultSet; // 操作'查询结果'
 import java.sql.SQLException; // 导入SQL操作的'异常类'
-
-
+import java.util.InputMismatchException;
 // 其他工具类
 import java.util.Scanner;
 
@@ -63,6 +62,25 @@ public class My_Database {
         
     }
     // 3. 删除一条数据 (根据id)
+    public static void delete_one(Connection connector, Scanner user_input) throws SQLException{
+        System.out.println("欢迎来到数据删除");
+        show_all(connector);
+        System.out.print("请输入要删除数据的id: ");
+        int input_id = user_input.nextInt();
+        user_input.nextLine(); // 消耗换行符
+        String delete_sql = "delete from tekon_item where item_id = ?;";
+        PreparedStatement delete = connector.prepareStatement(delete_sql);
+        delete.setInt(1, input_id);
+        int result = delete.executeUpdate();
+        if(result!=0){
+            System.out.println("\n操作完成, 共有 " + result + " 行受到影响");
+        }else{
+            System.out.println("\n操作不成功! 找不到id为" + input_id + "的数据条, 0行受到影响...");
+        }
+        
+
+
+    }
 
     // 4. 执行自定义SQL语句
 
@@ -108,7 +126,7 @@ public class My_Database {
                         insert_one(my_connector, user_input);
                         break;
                     case 3:
-                        
+                        delete_one(my_connector, user_input);
                         break;
                     case 4:
                         
@@ -127,7 +145,11 @@ public class My_Database {
         } catch (SQLException e) {
             System.out.println("\n发生了SQL异常!!");
             e.printStackTrace();
-        } finally {
+        } catch (InputMismatchException e){
+            System.out.println("检测到输入的数据类型不匹配!");
+        }
+        
+        finally {
 
         }
         
