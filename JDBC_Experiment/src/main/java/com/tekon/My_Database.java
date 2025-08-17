@@ -6,10 +6,13 @@ import java.sql.Statement; // 用于执行SQL语句的载体, 返回ResultSet结
 import java.sql.PreparedStatement; // 高级的'Statement' (用于带参数的'动态查询', 可以防范SQL注入, 且性能更好, 也可以用于'静态查询')
 import java.sql.ResultSet; // 操作'查询结果'
 import java.sql.SQLException; // 导入SQL操作的'异常类'
-import java.util.InputMismatchException;
+
 // 其他工具类
 import java.util.Scanner;
-
+import java.util.List;
+import java.util.ArrayList;
+// 其他异常类
+import java.util.InputMismatchException;
 
 public class My_Database {
 
@@ -61,7 +64,37 @@ public class My_Database {
         }
         
     }
-    // 3. 删除一条数据 (根据id)
+
+    // 3. 追加多条数据
+    public static void insert_many(Connection connector) {
+        System.out.println("为了测试方便起见, 这里直接用一个内置的List<Item>作为数据源, 省的自己输了XD");
+        Item unknown_mouse = new Item("M333-Mouse", "一款奇怪的杂牌透明蓝牙鼠标", 1);
+        Item newsmy = new Item("Newsmy A1 Mobile Terminal", "一个杂牌的移动终端", 1);
+        Item baka = new Item("Cirno Plushy", "捏一捏就会叫Baka的小玩偶", 1);
+        ArrayList<Item> item_list = new ArrayList<>();
+        item_list.add(unknown_mouse);
+        item_list.add(newsmy);
+        item_list.add(baka);
+
+        item_list.stream().forEach( (current_item) -> {
+            String insert_sql = "insert into tekon_item(item_name, item_desc, item_count) values(?,?,?);";
+            PreparedStatement inject;
+            try {
+                inject = connector.prepareStatement(insert_sql);
+                inject.setString(1, current_item.get_name());
+                inject.setString(2, current_item.get_desc());
+                inject.setInt(3, current_item.get_count());
+                if(inject.executeUpdate()!=0){
+                    System.out.println("成功插入了 " + current_item.get_name());
+                }
+            } catch (SQLException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        });
+    }
+    
+    // 4. 删除一条数据 (根据id)
     public static void delete_one(Connection connector, Scanner user_input) throws SQLException{
         System.out.println("欢迎来到数据删除");
         show_all(connector);
@@ -77,12 +110,14 @@ public class My_Database {
         }else{
             System.out.println("\n操作不成功! 找不到id为" + input_id + "的数据条, 0行受到影响...");
         }
-        
-
 
     }
 
-    // 4. 执行自定义SQL语句
+    // 5. 删除多条数据 (也是用id)
+    public static void delete_many(Connection connector){
+        
+    }
+
 
 /* ------------------分割线--------------------- */
     public static void main( String[] args ){
@@ -112,9 +147,10 @@ public class My_Database {
                 System.out.println("\n请选择操作选项: ");
                 System.out.println("1. 查询tekon表中所有数据");
                 System.out.println("2. 追加一条数据");
-                System.out.println("3. 删除一条数据(根据id)");
-                System.out.println("4. 输入&执行自定义SQL命令"); // 强烈不推荐, 但是这里仅为实践 XD
-                System.out.println("5. 退出程序");
+                System.out.println("3. 测试批量添加多条数据");
+                System.out.println("4. 删除一条数据(根据id)");
+                System.out.println("5. 批量删除多条数据");
+                System.out.println("6. 退出程序");
 
                 System.out.print("\n请输入您的选择: ");
                 String selected_option = user_input.nextLine();
@@ -126,14 +162,18 @@ public class My_Database {
                         insert_one(my_connector, user_input);
                         break;
                     case 3:
-                        delete_one(my_connector, user_input);
+                        insert_many(my_connector);
                         break;
                     case 4:
-                        
+                        delete_one(my_connector, user_input);
                         break;
                     case 5:
+
+                        break;
+                    case 6:
                         keep_running = false;
                         System.out.println("感谢您使用tekon_item数据库, 现在滚犊子吧 :3");
+
                         break;
                 
                     default:
@@ -150,7 +190,7 @@ public class My_Database {
         }
         
         finally {
-
+            // my_connector.close() // 正常来说要按顺序关闭 ResultSet -> Statement -> Connection, 以后注意!
         }
         
     }
