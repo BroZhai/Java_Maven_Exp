@@ -11,7 +11,6 @@ import java.sql.SQLException; // 导入SQL操作的'异常类'
 // 其他工具类
 import java.util.Scanner;
 
-import com.mysql.cj.x.protobuf.MysqlxPrepare.Prepare;
 
 public class My_Database {
 
@@ -24,8 +23,8 @@ public class My_Database {
             System.out.println("tekon_item表中好像当前毛都没有诶...");
         }else{
             // 表中有数据, 自行遍历每一个数据条并进行输出 
+            System.out.println("当前tekon_item有: ");
             do{ // 注意上面的if在'有数据'的情况下会'先耗一行数据', 所以下面用先do后while结构, 确保上面的if出来的数据没有'白消耗' XD
-                System.out.println("当前tekon_item有: ");
                 int item_id = results.getInt("item_id");
                 int item_count = results.getInt("item_count");
                 String item_name = results.getString("item_name");
@@ -39,7 +38,28 @@ public class My_Database {
     }
 
     // 2. 追加一条数据
-    public static void insert_one(Connection connector){
+    public static void insert_one(Connection connector, Scanner user_input) throws SQLException{
+        System.out.println("准备往数据库中追加一条新的数据");   
+        System.out.print("请输入物品名称: ");
+        String input_name = user_input.nextLine();
+        System.out.print("请输入物品描述: ");
+        String input_desc = user_input.nextLine();
+        System.out.print("请输入物品数量(整数): ");
+        int input_count = user_input.nextInt();
+        user_input.nextLine(); // 敲完数字后, Scanner的缓冲区中仍留有一个'\n'回车, 咱得给它耗掉, 防止在菜单选择时突然直接读了剩余的'\n'导致报错 XD
+
+        // 单独定义好插入的SQL语句
+        String insert_sql = "insert into tekon_item(item_name, item_desc, item_count) values(?,?,?);";
+        PreparedStatement inject = connector.prepareStatement(insert_sql);
+        inject.setString(1, input_name);
+        inject.setString(2, input_desc);
+        inject.setInt(3, input_count);
+        int result = inject.executeUpdate(); // 该方法湖返回'受影响'的行数
+        if(result!=0){
+            System.out.println("\n操作完成, 共有 " + result + " 行受到影响");
+        }else{
+            System.out.println("\n操作不成功! 没有行受到影响...");
+        }
         
     }
     // 3. 删除一条数据 (根据id)
@@ -85,7 +105,7 @@ public class My_Database {
                         show_all(my_connector);
                         break;
                     case 2:
-                        
+                        insert_one(my_connector, user_input);
                         break;
                     case 3:
                         
